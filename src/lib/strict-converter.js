@@ -13,7 +13,7 @@ module.exports = function convert(content, node){
   // If use strict is the first node, leave it be.
   var firstNode = defineFunction.body[0];
   _.each(defineFunction.body, function(n) {
-    nContent += content.substring(n.range[0],n.range[1]);
+    nContent += content.substring(n.range[0],n.range[1]) + "\n";
   });
   return nContent;  
 };
