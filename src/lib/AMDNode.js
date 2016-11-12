@@ -29,20 +29,24 @@ AMDNode.prototype.isDefine = function(){
  * Determine whether a node is an AMD style define call
  * This detects code in the format:
  *    define(['req1', 'req2'], function(Req1, Req1) {})
- * But not:
+ * and 
  *    define(function(require, exports, module){})
+ * if isWrapper is true, it will true only if it's format: define(function(require, exports, module){})
  * @param {Object} node AST Node
  * @returns {boolean} true if AMD style, false otherwise
  */
-AMDNode.prototype.isAMDStyle = function(){
+AMDNode.prototype.isAMDStyle = function(isWrapper){
   if(!this.isDefine()){
     return false;
   }
   var defineArguments = this.node.expression.arguments;
-  if(defineArguments[0].type !== 'ArrayExpression'){
+  if(!isWrapper && defineArguments[0].type === 'ArrayExpression' &&  defineArguments[1].type === 'FunctionExpression'){
+    return true;
+  } else if (defineArguments[0].type === 'FunctionExpression') {
+    return true;
+  } else {
     return false;
   }
-  return Boolean(defineArguments[1].type === 'FunctionExpression');
 };
 
 /**

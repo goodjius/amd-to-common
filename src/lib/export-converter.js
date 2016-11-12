@@ -16,11 +16,13 @@ module.exports = function convert(content, node){
   if(!returnStatement){
     return content;
   }
-
+  console.log(content);
   var returnStart = returnStatement.range[0];
   var definitionStart = returnStatement.argument.range[0];
+  var definitionEnd = returnStatement.argument.range[1];
   var upToReturn = content.substring(0, returnStart);
-  var afterReturn = content.substring(definitionStart, content.length);
-
-  return upToReturn + 'module.exports = ' + afterReturn;
+  var afterReturn = content.substring(definitionStart, definitionEnd);
+  afterReturn += content.substring(returnStatement.range[1], content.length);
+  return upToReturn + 'module.exports = ' + afterReturn + ";";
 };
+
